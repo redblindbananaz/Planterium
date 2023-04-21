@@ -116,8 +116,6 @@ const Home = ({ navigation }) => {
             const differenceInMilliseconds = timestamp2 - timestamp1 + timestamp3;
 
             const diffwater = differenceInMilliseconds / (24 * 60 * 60 * 1000);
-            console.log(diffwater)
-
 
             if (diffwater === 0) {
                 return "Today";

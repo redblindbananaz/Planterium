@@ -9,8 +9,10 @@ import { AntDesign } from '@expo/vector-icons';
 
 import Registercards from '../components/Registercards';
 import ActionConfirmPopup from '../components/ActionConfirmPopup';
+import UnderlineCategory from '../components/UnderlineCategory'
 
 const db = DatabaseConnection.getConnection();
+
 
 const ViewPlant = ({ navigation, route }) => {
     // const navigation = useNavigation();
@@ -21,7 +23,7 @@ const ViewPlant = ({ navigation, route }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [title, setTitle] = useState('')
     const [message, setMessage] = useState('')
-    const [action, SetAction] = useState()
+
 
     const handleCancel = () => {
         navigation.navigate('Main')
@@ -29,7 +31,6 @@ const ViewPlant = ({ navigation, route }) => {
     const handleEdit = () => {
 
         navigation.navigate('Register', (plantInfo))
-        console.log(plantInfo)
 
     }
     const handleDelete = () => {
@@ -117,6 +118,32 @@ const ViewPlant = ({ navigation, route }) => {
         });
     }, [plantId]);
 
+
+    const HealthItems = [
+        { id: 1, name: 'Dead', color: colors.Red },
+        { id: 2, name: 'Poor', color: colors.Orange },
+        { id: 3, name: 'Fair', color: colors.Yellow },
+        { id: 4, name: 'Good', color: colors.LightGreen },
+        { id: 5, name: 'Great', color: colors.Full },
+    ];
+
+    const RateColor = [
+        colors.Red,
+        colors.Orange,
+        colors.Yellow,
+        colors.LightGreen,
+        colors.Full,
+    ];
+
+    const RateNames = [
+        'Dead', 'Poor', 'Fair', 'Good', 'Great'
+    ]
+
+
+
+
+
+
     return (
 
         <React.Fragment>
@@ -146,15 +173,50 @@ const ViewPlant = ({ navigation, route }) => {
                     >
                         <Image source={{ uri: plantInfo.plant_thumbnail }} style={styles.imagecontainer} />
 
-                        <Registercards caterory={plantInfo.plant_name}>
+                        <Registercards underlineSize={0}>
                             {/* <Text>Plant ID: {plantInfo.plant_id}</Text> */}
-
+                            <Text style={styles.name}>{plantInfo.plant_name}</Text>
+                            <UnderlineCategory linewidth={'100%'} />
                             <Text style={styles.botanical}>{plantInfo.plant_botanical}</Text>
-                            <Text>Purchase Date: {plantInfo.plant_purchase}</Text>
-                            <Text>Health: {plantInfo.plant_health}</Text>
-                            <Text>Location: {plantInfo.plant_location}</Text>
-                            <Text>Watering Schedule: {plantInfo.plant_schedule} Days</Text>
-                            <Text>Last Watered: {plantInfo.plant_waterDate} Days</Text>
+                            <View style={styles.contentsub}>
+                                <Text style={styles.sub}>Owned Since: </Text>
+                                <Text>{plantInfo.plant_purchase}</Text>
+
+                            </View>
+                            <View style={styles.contentsub}>
+                                <Text style={styles.sub}>Health: </Text>
+                                <MaterialCommunityIcons
+                                    name="leaf-circle-outline"
+                                    size={30}
+                                    color={RateColor[plantInfo.plant_health - 1]}
+                                    style={styles.healthIcon}
+                                />
+                                <Text
+                                    style={{
+                                        color: RateColor[plantInfo.plant_health - 1], fontSize: 18, letterSpacing: 4,
+                                        fontWeight: '500',
+                                        textAlign: 'center',
+                                    }}
+                                >{RateNames[plantInfo.plant_health - 1]}</Text>
+
+
+
+                            </View>
+                            <View style={styles.contentsub}>
+                                <Text style={styles.sub}>Location: </Text>
+                                <Text style={styles.sub2}> {plantInfo.plant_location}</Text>
+                            </View>
+                            <View style={styles.contentsub}>
+                                <Text style={styles.sub}>Water every: </Text>
+                                <Text style={styles.sub2}>{plantInfo.plant_schedule}</Text>
+                                <Text style={styles.sub3}>Days</Text>
+                            </View>
+                            <View style={styles.contentsub}>
+                                <Text style={styles.sub}>Last Watered: </Text>
+                                <Text style={styles.sub2}>{plantInfo.plant_waterDate} Days</Text>
+                            </View>
+
+
 
                         </Registercards>
                         <View style={{
@@ -236,13 +298,23 @@ const styles = StyleSheet.create({
     imagecontainer: {
         alignSelf: 'center',
         marginTop: '10%',
-        width: 150,
-        height: 150,
-        borderRadius: 100
+        width: 155,
+        height: 155,
+        borderRadius: 100,
+        borderWidth: 5,
+        borderColor: colors.FadedWhite,
     },
     Linear: {
         height: 80,
         borderRadius: 16,
+    },
+
+    name: {
+        fontSize: 24,
+        letterSpacing: 4,
+        fontWeight: '600',
+        textAlign: 'center',
+        color: colors.White,
     },
     botanical: {
         color: colors.textAccent,
@@ -252,6 +324,33 @@ const styles = StyleSheet.create({
         textAlign: "center",
         letterSpacing: 1.4,
     },
+    contentsub: {
+        flexDirection: 'row',
+        borderColor: 'red',
+        borderWidth: 2,
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 16,
+    },
+
+    sub: {
+        fontSize: 16,
+        letterSpacing: 4,
+        fontWeight: '300',
+        textAlign: 'center',
+        color: colors.White,
+    },
+
+    health: {
+        fontSize: 18,
+        letterSpacing: 4,
+
+    },
+
+
+
+
+    //Bottom part:
     pad: {
         flexDirection: 'row',
         justifyContent: 'space-between',
