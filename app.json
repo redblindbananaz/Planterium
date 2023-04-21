@@ -8,12 +8,31 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "Cover",
+      "backgroundColor": "#212A23"
     },
-    "assetBundlePatterns": [
-      "**/*"
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "permissions": {
+            "camera": {
+              "required": true
+            },
+            "mediaLibrary": {
+              "required": false
+            }
+          }
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
     ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
