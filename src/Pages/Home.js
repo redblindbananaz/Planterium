@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, View, FlatList, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { Button, StyleSheet, Text, TextInput, View, FlatList, ScrollView, Image, TouchableOpacity, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Screen from '../components/Screen'
 import { DatabaseConnection } from '../DataBase/Database'
@@ -25,20 +25,9 @@ const Home = ({ navigation }) => {
         navigation.navigate('Register')
     }
 
-
-
     const handlecardPress = (item) => {
         navigation.navigate('View', { plantId: item.plant_id })
     }
-    // const [selected, setSelected] = useState(false);
-    // const handleCardLongPress = () => {
-    //     setSelected(!selected);
-    //     console.log('card long pressed')
-    //     console.log('Pressed card id :' + item.plant_id)
-    // }
-
-
-
 
     const [flatlistItems, setFlatListItems] = useState([])
 
@@ -93,8 +82,9 @@ const Home = ({ navigation }) => {
             }
 
         } return (
-            <ScrollView>
-                <TouchableOpacity onPress={() => handlecardPress(item)} >
+            <ScrollView style={styles.scroll}>
+                <Pressable
+                    onPress={() => handlecardPress(item)}>
                     <View style={{
                         borderColor: colors.FadedWhite,
                         borderWidth: 1,
@@ -140,7 +130,7 @@ const Home = ({ navigation }) => {
                             </View>
                         </LinearGradient>
                     </View>
-                </TouchableOpacity>
+                </Pressable>
             </ScrollView>
         )
 
@@ -175,11 +165,10 @@ const styles = StyleSheet.create({
         marginTop: "40%",
 
     },
-    content: {},
-
-    listContainer: {
-
+    scroll: {
+        flex: 1,
     },
+
     bottom: {
         position: 'absolute',
         bottom: 0,
