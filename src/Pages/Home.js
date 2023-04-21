@@ -10,6 +10,7 @@ import { colors } from "../config/colors"
 import { useNavigation } from '@react-navigation/native'
 import PlantCardPreview from '../components/PlantCardPreview'
 import WelcomeMessage from "../components/WelcomeMessage"
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 
 const db = DatabaseConnection.getConnection();
@@ -31,7 +32,6 @@ const Home = ({ navigation }) => {
 
     const [flatlistItems, setFlatListItems] = useState([])
 
-
     useEffect(() => {
         db.transaction(function (tx) {
             tx.executeSql(
@@ -48,6 +48,7 @@ const Home = ({ navigation }) => {
         })
     }, [isFocused])
 
+
     const listViewItems = (item) => {
 
         // Color rating for the leaf icon, changing according to user rating from 1 to 5.
@@ -60,14 +61,19 @@ const Home = ({ navigation }) => {
         ];
         const healthColor = RateColor[item.plant_health - 1];
 
+
+
         // Calculate time difference between purchase date and current date
-        const timeDiff = getTimeDifference(new Date(item.plant_purchase));
+        const timeDiff = getTimeDifference(item.plant_purchase);
 
         // Function to calculate time difference between two dates
-        function getTimeDifference({ purchaseDate }) {
+        function getTimeDifference(purchaseDate) {
             const today = new Date();
+            const [dd, mm, yy] = purchaseDate.split('-');
+            const purchaseDateTime = new Date(parseInt("20" + yy), parseInt(mm) - 1, parseInt(dd)); // construct a new Date object with the same year, month, and day components as the purchase date
 
-            const diff = Math.floor((today - purchaseDate) / (1000 * 60 * 60 * 24));
+            const diff = Math.floor((today - purchaseDateTime) / (1000 * 60 * 60 * 24));
+
 
             if (diff >= 365) {
                 return `${Math.floor(diff / 365)} Years `;
@@ -80,58 +86,103 @@ const Home = ({ navigation }) => {
             } else {
                 return "Today";
             }
+        }
+        // Calculate the next watering date based on water schedule
+        const nextWatering = getNextWatering(item.plant_schedule, item.plant_waterDate);
 
-        } return (
-            <ScrollView style={styles.scroll}>
-                <Pressable
-                    onPress={() => handlecardPress(item)}>
-                    <View style={{
-                        borderColor: colors.FadedWhite,
-                        borderWidth: 1,
-                        borderRadius: 16,
-                        marginBottom: 16,
-                        flexDirection: "row",
-                    }}>
-                        <LinearGradient
-                            colors={["rgba(46,46,46,0.7)", "rgba(255,255,255,0.2)"]}
-                            start={[0, 0]}
-                            end={[0, 1]}
-                            style={styles.LinearGradientStyle}
-                        >
-                            <Image source={{ uri: item.plant_thumbnail }} style={styles.thumbnailPlant} />
-                            <View style={styles.midContent}>
-                                <Text style={styles.name}>{item.plant_name}</Text>
-                                <Text style={styles.botanical}>{item.plant_botanical}</Text>
-                                <View style={styles.watering}>
-                                    <Text style={styles.lastWatered}>
-                                        {" "}
-                                        {item.plant_schedule + "  Days ago"}{" "}
-                                    </Text>
-                                    <View style={styles.empty}></View>
-                                    <Text style={styles.nextWatered}>
-                                        In {item.plant_waterDate - item.plant_schedule} Days
-                                    </Text>
-                                </View>
-                                <Ionicons
-                                    name="ios-water"
-                                    size={24}
-                                    color="white"
-                                    style={styles.waterIcon}
-                                />
+        // Function to calculate time difference between two dates
+        function getTimeDifference(wateredDate) {
+            const today = new Date();
+            const [dd, mm, yy] = wateredDate.split('-');
+            const wateredDateTime = new Date(parseInt("20" + yy), parseInt(mm) - 1, parseInt(dd));
+
+            const diff = Math.floor((today - wateredDateTime) / (1000 * 60 * 60 * 24));
+
+            if (diff === 0) {
+                return "Today";
+            } else if (diff === 1) {
+                return "Yesterday";
+            } else {
+                return `${diff} Days Ago`;
+            }
+        }
+
+        // Function to calculate the next watering date based on water schedule
+        function getNextWatering(waterSchedule, lastWateredDate) {
+            if (!lastWateredDate) {
+                return "Now";
+            }
+
+            const [dd, mm, yy] = lastWateredDate.split('-');
+            const lastWateredTime = new Date(parseInt("20" + yy), parseInt(mm) - 1, parseInt(dd));
+            const nextWateringTime = new Date(lastWateredTime.getTime() + waterSchedule * 24 * 60 * 60 * 1000);
+
+            const today = new Date();
+            const diff = Math.floor((nextWateringTime - today) / (1000 * 60 * 60 * 24));
+
+            if (diff === 0) {
+                return "Today";
+            } else if (diff === 1) {
+                return "Tomorrow";
+            } else if (diff < 0) {
+                return "Overdue";
+            } else {
+                return `In ${diff} Days`;
+            }
+        }
+
+
+
+        return (
+
+            <TouchableOpacity
+                onPress={() => handlecardPress(item)}>
+                <View style={{
+                    borderColor: colors.FadedWhite,
+                    borderWidth: 1,
+                    borderRadius: 16,
+                    marginBottom: 16,
+                    flexDirection: "row",
+                }}>
+                    <LinearGradient
+                        colors={["rgba(46,46,46,0.7)", "rgba(255,255,255,0.2)"]}
+                        start={[0, 0]}
+                        end={[0, 1]}
+                        style={styles.LinearGradientStyle}
+                    >
+                        <Image source={{ uri: item.plant_thumbnail }} style={styles.thumbnailPlant} />
+                        <View style={styles.midContent}>
+                            <Text style={styles.name}>{item.plant_name}</Text>
+                            <Text style={styles.botanical}>{item.plant_botanical}</Text>
+                            <View style={styles.watering}>
+                                <Text style={styles.lastWatered}>
+                                    Watering:
+                                </Text>
+                                <View style={styles.empty}></View>
+                                <Text style={styles.nextWatered}>
+                                    {nextWatering}
+                                </Text>
                             </View>
-                            <View style={styles.rightContent}>
-                                <MaterialCommunityIcons
-                                    name="leaf-circle-outline"
-                                    size={30}
-                                    color={healthColor}
-                                    style={styles.icon}
-                                />
-                                <Text style={styles.time}>{timeDiff}</Text>
-                            </View>
-                        </LinearGradient>
-                    </View>
-                </Pressable>
-            </ScrollView>
+                            <Ionicons
+                                name="ios-water"
+                                size={24}
+                                color="white"
+                                style={styles.waterIcon}
+                            />
+                        </View>
+                        <View style={styles.rightContent}>
+                            <MaterialCommunityIcons
+                                name="leaf-circle-outline"
+                                size={30}
+                                color={healthColor}
+                                style={styles.icon}
+                            />
+                            <Text style={styles.time}>{timeDiff}</Text>
+                        </View>
+                    </LinearGradient>
+                </View>
+            </TouchableOpacity>
+
         )
 
     }
@@ -165,9 +216,9 @@ const styles = StyleSheet.create({
         marginTop: "40%",
 
     },
-    scroll: {
-        flex: 1,
-    },
+    // scroll: {
+    //     flex: 1,
+    // },
 
     bottom: {
         position: 'absolute',
@@ -266,6 +317,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     time: {
+        justifyContent: 'center',
         color: colors.textAccent,
         backgroundColor: colors.FadedGreen,
         fontSize: 10,
