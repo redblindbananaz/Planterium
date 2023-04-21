@@ -29,7 +29,7 @@ const DateInput = ({ onDateSelect }) => {
 
     }
     const handleSelect = (aquisitionDate) => {
-        const formattedDate = moment(aquisitionDate).format("DD-MM-YY")
+        const formattedDate = moment(aquisitionDate).format("YYYY-MM-DD")
         setAquisitionDate(formattedDate)
         hideDatePicker();
         onDateSelect(formattedDate)
@@ -58,10 +58,10 @@ const DateInput = ({ onDateSelect }) => {
                 </TouchableOpacity>
                 <TextInput
                     style={styles.input3}
-                    placeholder="DD-MM-YY "
+                    placeholder="YYYY-MM-DD "
                     placeholderTextColor={"rgba(255,255,255,0.3)"}
                     value={aquisitionDate}
-                    maxLength={8}
+                    maxLength={10}
                     keyboardType="numeric"
                     onChangeText={handleDateChange}
                 />

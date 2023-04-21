@@ -2,6 +2,7 @@ import { Button, StyleSheet, Text, TextInput, View, FlatList, ScrollView, Image,
 import React, { useEffect, useState } from 'react'
 import Screen from '../components/Screen'
 import { DatabaseConnection } from '../DataBase/Database'
+import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -61,18 +62,58 @@ const Home = ({ navigation }) => {
         ];
         const healthColor = RateColor[item.plant_health - 1];
 
+        const getPurchaseTime = (item) => {
+            const currentDate = new Date(); // creates a new Date object with the current date and time
+
+            const day = currentDate.getDate().toString().padStart(2, '0');
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            const year = currentDate.getFullYear().toString();
+
+            const formattedDate = `${year}-${month}-${day}`;
+            console.log('current date: ' + formattedDate)
+            console.log('purchase date: ' + item.plant_purchase)
+
+            const timestamp1 = new Date(formattedDate).getTime();
+            const timestamp2 = new Date(item.plant_purchase).getTime();
+
+            const differenceInMilliseconds = timestamp1 - timestamp2;
+
+
+            const diff = differenceInMilliseconds / (24 * 60 * 60 * 1000);
+            console.log(diff)
+
+            if (diff >= 365) {
+                return `${Math.floor(diff / 365)} Years `;
+            } else if (diff >= 28) {
+                return `${Math.floor(diff / 28)} Months`;
+            } else if (diff >= 7) {
+                return `${Math.floor(diff / 7)} Weeks `;
+            } else if (diff >= 1) {
+                return `${diff} Days `;
+            } else {
+                return "Today";
+            }
+
+        }
+
+
+
+        // const moment = require('moment');
+
+        // const currentDateToday = moment().format('DD-MM-YYYY');
+        // console.log(currentDateToday);
+        // const purchase = item.plant_purchase
+        // const purchaseDate = moment(purchase).format('DD-MM-YYYY');
+        // console.log(purchaseDate)
+        // const differenceInDays = currentDateToday.diff(timestamp2, 'Days')
+        // console.log(differenceInDays)
 
 
         // Calculate time difference between purchase date and current date
-        const timeDiff = getTimeDifference(item.plant_purchase);
+        const timeDiffPurchase = (item) => {
+            const purchaseDate = item.plant_purchase
+            const diff = Math.floor((formattedDate - purchaseDate));
 
-        // Function to calculate time difference between two dates
-        function getTimeDifference(purchaseDate) {
-            const today = new Date();
-            const [dd, mm, yy] = purchaseDate.split('-');
-            const purchaseDateTime = new Date(parseInt("20" + yy), parseInt(mm) - 1, parseInt(dd)); // construct a new Date object with the same year, month, and day components as the purchase date
-
-            const diff = Math.floor((today - purchaseDateTime) / (1000 * 60 * 60 * 24));
 
 
             if (diff >= 365) {
@@ -86,15 +127,22 @@ const Home = ({ navigation }) => {
             } else {
                 return "Today";
             }
+
+        }
+        // Function to calculate time difference between two dates
+        function getTimeDifference(item) {
+
         }
         // Calculate the next watering date based on water schedule
-        const nextWatering = getNextWatering(item.plant_schedule, item.plant_waterDate);
+        const nextWatering = getNextWatering(item.plant_waterDate);
 
         // Function to calculate time difference between two dates
         function getTimeDifference(wateredDate) {
             const today = new Date();
             const [dd, mm, yy] = wateredDate.split('-');
             const wateredDateTime = new Date(parseInt("20" + yy), parseInt(mm) - 1, parseInt(dd));
+            console.log(today)
+            console.log(wateredDateTime)
 
             const diff = Math.floor((today - wateredDateTime) / (1000 * 60 * 60 * 24));
 
@@ -119,6 +167,7 @@ const Home = ({ navigation }) => {
 
             const today = new Date();
             const diff = Math.floor((nextWateringTime - today) / (1000 * 60 * 60 * 24));
+            console.log(lastWateredDate)
 
             if (diff === 0) {
                 return "Today";
@@ -160,7 +209,7 @@ const Home = ({ navigation }) => {
                                 </Text>
                                 <View style={styles.empty}></View>
                                 <Text style={styles.nextWatered}>
-                                    {nextWatering}
+
                                 </Text>
                             </View>
                             <Ionicons
@@ -177,7 +226,7 @@ const Home = ({ navigation }) => {
                                 color={healthColor}
                                 style={styles.icon}
                             />
-                            <Text style={styles.time}>{timeDiff}</Text>
+                            <Text style={styles.time}>{getPurchaseTime(item)}</Text>
                         </View>
                     </LinearGradient>
                 </View>

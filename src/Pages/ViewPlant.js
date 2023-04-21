@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Button, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, Button, ScrollView, Modal, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Screen from '../components/Screen'
 import { DatabaseConnection } from '../DataBase/Database';
@@ -8,6 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
 import Registercards from '../components/Registercards';
+import ActionConfirmPopup from '../components/ActionConfirmPopup';
 
 const db = DatabaseConnection.getConnection();
 
@@ -15,7 +16,12 @@ const ViewPlant = ({ navigation, route }) => {
     // const navigation = useNavigation();
 
     const { plantId } = route.params;
+
     const [plantInfo, setPlantInfo] = useState();
+    const [modalVisible, setModalVisible] = useState(false)
+    const [title, setTitle] = useState('')
+    const [message, setMessage] = useState('')
+    const [action, SetAction] = useState()
 
     const handleCancel = () => {
         navigation.navigate('Main')
@@ -27,6 +33,7 @@ const ViewPlant = ({ navigation, route }) => {
 
     }
     const handleDelete = () => {
+        setModalVisible(false)
         db.transaction(function (tx) {
             tx.executeSql(
                 'DELETE FROM table_plantest1 WHERE plant_id = ?',
@@ -44,6 +51,58 @@ const ViewPlant = ({ navigation, route }) => {
 
     }
 
+
+    const currentDate = new Date();
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate.getFullYear().toString();
+
+    const formattedDate = `${day}-${month}-${year}`;
+    console.log('Today\'s date is ' + formattedDate);
+
+
+
+
+    const handleWaterconfirmation = () => {
+        setModalVisible(false)
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'UPDATE table_plantest1 SET plant_waterDate = ? WHERE plant_id = ?',
+                [formattedDate, plantId],
+                (tx, results) => {
+                    console.log('Plant watering successfully');
+                    navigation.navigate('Main')
+                    // You can trigger a refresh of the data here, if needed
+                },
+                (tx, error) => {
+                    console.log('Error watering plant', error);
+                }
+            );
+        });
+
+
+    }
+    const handleActionPress = () => {
+        if (title === 'Watering Now?') {
+            handleWaterconfirmation();
+        } else if (title === 'Deleting Plant?') {
+            handleDelete();
+        }
+    };
+    const handleWatering = () => {
+        setModalVisible(true)
+        setTitle('Watering Now?')
+        setMessage('Watering schedule will be update automaticaly if necessary')
+
+    };
+
+    const handleDeleting = () => {
+        setModalVisible(true)
+        setTitle('Deleting Plant?')
+        setMessage('This action will Delete this plant form the database.')
+
+    }
+
     useEffect(() => {
         db.transaction((tx) => {
             tx.executeSql(
@@ -57,11 +116,22 @@ const ViewPlant = ({ navigation, route }) => {
             );
         });
     }, [plantId]);
+
     return (
 
         <React.Fragment>
             {plantInfo ? (
                 <View style={styles.containerBox}>
+                    <Modal visible={modalVisible} transparent >
+                        <ActionConfirmPopup
+                            title={title}
+                            message={message}
+                            message2='Would you like to Continue?'
+                            cancelPress={handleCancel}
+                            actionPress={handleActionPress}
+                            actionName='CONFIRM' />
+
+                    </Modal>
                     <Image
                         source={require("../Assets/Background2.png")}
                         style={styles.BackgroundImage}
@@ -108,13 +178,19 @@ const ViewPlant = ({ navigation, route }) => {
 
                                         </View>
                                     </TouchableOpacity>
+                                    <TouchableOpacity style={styles.button} onPress={handleWatering}>
+                                        <View style={styles.circle}>
+                                            <MaterialCommunityIcons name="water-outline" size={24} color={colors.FadedWhite} />
+
+                                        </View>
+                                    </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={handleEdit}>
                                         <View style={styles.circle}>
                                             <AntDesign name="edit" size={24} color={colors.FadedWhite} />
 
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button} onPress={handleDelete}>
+                                    <TouchableOpacity style={styles.button} onPress={handleDeleting}>
                                         <View style={styles.circle}>
                                             <AntDesign name="delete" size={24} color={colors.FadedWhite} />
 
