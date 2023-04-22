@@ -9,6 +9,7 @@ import Home from './Home';
 import Rooms from './Rooms'
 import BackgroundImage from '../components/BackgroundImage';
 import AddButton from '../components/AddButton';
+import RoomListScreen from './RoomListScreen';
 
 const db = DatabaseConnection.getConnection();
 
@@ -18,14 +19,14 @@ const Main = ({ navigation }) => {
     useEffect(() => {
         db.transaction(function (tx) {
             tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS table_plantest1(plant_id INTEGER PRIMARY KEY AUTOINCREMENT, plant_thumbnail BLOB, plant_name TEXT, plant_botanical TEXT,plant_purchase TEXT, plant_health TEXT, plant_location TEXT,plant_schedule TEXT ,plant_waterDate TEXT)',
+                'CREATE TABLE IF NOT EXISTS table_plantData (plant_id INTEGER PRIMARY KEY AUTOINCREMENT, plant_thumbnail BLOB, plant_name TEXT, plant_botanical TEXT,plant_purchase TEXT, plant_health INTEGER, plant_location TEXT,plant_schedule INTEGER ,plant_waterDate TEXT)',
                 [],
                 (tx, results) => {
                     console.log('Table plants created successfully')
                 },
             )
         })
-    }, [])
+    }, [isFocused])
 
     const [activeTab, setActiveTab] = useState("Plants");
 
@@ -38,7 +39,7 @@ const Main = ({ navigation }) => {
             case "Plants":
                 return <Home navigation={navigation} />;
             case "Rooms":
-                return <Rooms />;
+                return <RoomListScreen navigation={navigation} />;
             default:
                 return null;
         }

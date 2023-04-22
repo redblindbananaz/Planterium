@@ -73,8 +73,8 @@ const RegisterPlant = ({ navigation, route }) => {
     const [BotName, setBotName] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedHealth, setSelectedHealth] = useState('5');
-    const [selectedLocation, setSelectedLocation] = useState('1');
-    const [wateringDuration, setWateringDuration] = useState('4');
+    const [selectedLocation, setSelectedLocation] = useState(parseInt('1'));
+    const [wateringDuration, setWateringDuration] = useState(parseInt('4'));
     const [waterDate, setWaterDate] = useState("")
 
 
@@ -122,7 +122,7 @@ const RegisterPlant = ({ navigation, route }) => {
             // ELSE perform an INSERT Operation
             console.log('Register function called and no plant yet: INSERT call')
             tx.executeSql(
-                'INSERT INTO table_plantest1(plant_thumbnail, plant_name, plant_botanical, plant_purchase, plant_health, plant_location, plant_schedule, plant_waterDate)VALUES(?,?,?,?,?,?,?,?)',
+                'INSERT INTO table_plantData(plant_thumbnail, plant_name, plant_botanical, plant_purchase, plant_health, plant_location, plant_schedule, plant_waterDate)VALUES(?,?,?,?,?,?,?,?)',
                 [imagepicked, plantName, BotName, selectedDate, selectedHealth, selectedLocation, wateringDuration, waterDate],
                 (tx, results) => {
                     console.log('Plant ADDED successfully')
@@ -141,7 +141,7 @@ const RegisterPlant = ({ navigation, route }) => {
 
         db.transaction(function (tx) {
             tx.executeSql(
-                'UPDATE table_plantest1 SET plant_thumbnail = ?,plant_name = ?, plant_botanical = ?, plant_purchase = ?, plant_health = ?, plant_location = ?, plant_schedule = ?,plant_waterDate = ?  WHERE plant_id = ?',
+                'UPDATE table_plantData SET plant_thumbnail = ?,plant_name = ?, plant_botanical = ?, plant_purchase = ?, plant_health = ?, plant_location = ?, plant_schedule = ?,plant_waterDate = ?  WHERE plant_id = ?',
                 [imagepicked, plantName, BotName, selectedDate, selectedHealth, selectedLocation, wateringDuration, waterDate, details],
 
                 (tx, results) => {

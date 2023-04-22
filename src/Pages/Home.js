@@ -34,7 +34,7 @@ const Home = ({ navigation }) => {
     useEffect(() => {
         db.transaction(function (tx) {
             tx.executeSql(
-                'SELECT * from table_plantest1',
+                'SELECT * from table_plantData',
                 [],
                 (tx, results) => {
                     var temp = [];

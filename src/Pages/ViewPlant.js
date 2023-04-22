@@ -38,7 +38,7 @@ const ViewPlant = ({ navigation, route }) => {
         setModalVisible(false)
         db.transaction(function (tx) {
             tx.executeSql(
-                'DELETE FROM table_plantest1 WHERE plant_id = ?',
+                'DELETE FROM table_plantData WHERE plant_id = ?',
                 [plantId],
                 (tx, results) => {
                     console.log('Plant deleted successfully');
@@ -69,7 +69,7 @@ const ViewPlant = ({ navigation, route }) => {
         setModalVisible(false)
         db.transaction(function (tx) {
             tx.executeSql(
-                'UPDATE table_plantest1 SET plant_waterDate = ? WHERE plant_id = ?',
+                'UPDATE table_plantData SET plant_waterDate = ? WHERE plant_id = ?',
                 [formattedDate, plantId],
                 (tx, results) => {
                     console.log('Plant watering successfully');
@@ -108,7 +108,7 @@ const ViewPlant = ({ navigation, route }) => {
     useEffect(() => {
         db.transaction((tx) => {
             tx.executeSql(
-                'SELECT * FROM table_plantest1 WHERE plant_id = ?',
+                'SELECT * FROM table_plantData WHERE plant_id = ?',
                 [plantId],
                 (tx, results) => {
                     if (results.rows.length > 0) {
@@ -142,7 +142,6 @@ const ViewPlant = ({ navigation, route }) => {
 
     const Locations = [
         'Bedroom', 'Lounge', 'Bathroom', 'Kitchen', 'Office', 'Cabinet', 'Other'
-
     ]
 
     return (
