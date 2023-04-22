@@ -13,8 +13,8 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - Address the resolution issue
 - Avoid poor and unclear navigation
 - Implement the landscape modes
-- Try to have an auto-fill feature=> Not applicatple for this project.
-- Any two advanced features: Camera access and Design
+- Try to have an auto-fill feature=> Not applicable for this project But use of numeric keyboard if number need to be entered.
+- Advanced Features
 
 ## Structure Tree:
 
@@ -68,7 +68,7 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 
 - Finish View plant layout: **Done**
 - Room => show accurate number of plants: **Done**
-- long press select for cards=> watering
+- empty entries enable
 - watering rooms?
 - overdue watering=> red border of cards or red tint=> custom attributes
 - Camera issues promises
@@ -77,3 +77,4 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - Fix days 8.0 to 8 **Done** Data base updated to Integer for Days
 - Create ascreen recording to demo the application.
 - README file for GitHub
+- Code Clean up

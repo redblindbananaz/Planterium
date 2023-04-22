@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DatabaseConnection } from '../DataBase/Database';
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,108 +8,149 @@ import { useIsFocused } from '@react-navigation/native';
 
 
 import WelcomeMessage from '../components/WelcomeMessage'
+import PlantCardPreview from '../components/PlantCardPreview';
+
 
 
 const db = DatabaseConnection.getConnection();
 
-const RoomCard = ({ room, plantCount }) => {
+const PlantList = ({ plant }) => {
+    console.log(plant)
+    return (
+        <View style={styles.visibleconatiner}>
+            <Text>{plant.plant_name}</Text>
+        </View>
+    )
+}
 
-
-
-    const roomNameToId = {
-        1: 'Bedroom',
-        2: 'Lounge',
-        3: 'Bathroom',
-        4: 'Kitchen',
-        5: 'Office',
-        6: 'Cabinet',
-        7: 'Other'
-    };
-    const roomId = parseInt(room, 10);
-    const roomName = roomNameToId[roomId];
-
-    const photosToId = {
-        1: require('../Assets/bedroom.png'),
-        2: require('../Assets/lounge.png'),
-        3: require('../Assets/bathroom.png'),
-        4: require('../Assets/kitchen.png'),
-        5: require('../Assets/office.png'),
-        6: require('../Assets/cabinet.png'),
-        7: require('../Assets/hallway.png'),
-    };
-    const photo = photosToId[roomId]
+const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExpand }) => {
 
     return (
-        <View>
-            <TouchableOpacity>
-                <View style={styles.roomCard}>
+        <ScrollView >
+            <TouchableOpacity onPress={toggleExpand}>
+                <View style={{
+                    borderColor: colors.FadedWhite,
+                    borderWidth: 1,
+                    borderRadius: 16,
+                    marginBottom: 16,
+                    flexDirection: "row",
+                    height: isVisible ? 500 : 80
+
+                }}>
                     <LinearGradient
                         colors={["rgba(46,46,46,0.7)", "rgba(255,255,255,0.2)"]}
                         start={[0, 0]}
                         end={[0, 1]}
                         style={styles.LinearGradientStyle}
                     >
-                        <Image source={photo} style={styles.thumbnailRoom} />
-                        <Text style={styles.name}>{roomName}</Text>
+                        <Image style={styles.thumbnailRoom} />
+                        <Text style={styles.name}>location:{location}</Text>
                         <View style={styles.numberPlants}>
                             <Text style={styles.number}>{plantCount}</Text>
                             <MaterialCommunityIcons name="flower-tulip" size={24} color={colors.textAccent} style={styles.flower} />
                         </View>
+                        {isVisible && (
+                            <View>
+                                {plantsByLocation[location].map((plant, index) => (
+                                    <PlantList key={index} plant={plant} />
+                                ))}
+                            </View>
+                        )}
                     </LinearGradient>
                 </View>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     )
 }
 
 const RoomListScreen = () => {
+    const [plantsByLocation, setPlantsByLocation] = useState({});
 
-    const [roomList, setRoomList] = useState([]);
-    // Use useIsFocused hook to determine if the screen is focused, to update DATA
     const isFocused = useIsFocused();
+    const [isCardExpanded, setIsCardExpanded] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const [expandedIndex, setExpandedIndex] = useState(-1);
+
+    // const toggleExpand = (index) => {
+    //     setIsVisible(!isVisible)
+    //     setIsCardExpanded(!isCardExpanded)
+    //     setExpandedIndex(index);
+    // }
+
+    const toggleExpand = (index) => {
+        if (isCardExpanded && expandedIndex === index) {
+            setIsVisible(false);
+            setIsCardExpanded(false);
+            setExpandedIndex(-1);
+        } else {
+            setIsVisible(true);
+            setIsCardExpanded(true);
+            setExpandedIndex(index);
+        }
+    }
+
 
     useEffect(() => {
-        // Retrieve the list of rooms with the number of plants in each room
         db.transaction((tx) => {
             tx.executeSql(
-                `SELECT plant_location, COUNT(*) as plant_count
-            FROM table_plantData
-         WHERE plant_waterDate IS NOT NULL
-         GROUP BY plant_location`,
+                `SELECT table_plantData.*
+            FROM (
+              SELECT plant_location
+              FROM table_plantData
+              GROUP BY plant_location
+            ) AS locations
+            JOIN table_plantData ON locations.plant_location = table_plantData.plant_location`,
                 [],
                 (_, { rows }) => {
-                    setRoomList(rows._array);
+                    const plantsByLocation = {};
+
+                    // Iterate over the rows and group them by location
+                    rows._array.forEach((plant) => {
+                        const { plant_location } = plant;
+                        if (!plantsByLocation[plant_location]) {
+                            plantsByLocation[plant_location] = [];
+                        }
+                        plantsByLocation[plant_location].push(plant);
+                    });
+
+                    // Set the state with the plants grouped by location
+                    setPlantsByLocation(plantsByLocation);
                 }
             );
         });
     }, [isFocused]);
+
+
     return (
-        <View style={styles.containerRoom}>
-            <FlatList
-                data={roomList}
-                renderItem={({ item }) => (
-                    <RoomCard room={item.plant_location} plantCount={item.plant_count} />
-                )}
-                keyExtractor={(item) => item.plant_location}
-                removeClippedSubviews={true}
-                ListEmptyComponent={
-                    < WelcomeMessage />
-                }
-            />
-        </View>
+
+
+        <FlatList
+            style={styles.containerRoom}
+            data={Object.keys(plantsByLocation)}
+            keyExtractor={(item) => item}
+            renderItem={({ item, index }) => (
+                <View>
+                    <RoomCard
+                        location={item}
+                        plantCount={plantsByLocation[item].length}
+                        isVisible={expandedIndex === index}
+                        toggleExpand={() => toggleExpand(index)}
+                        plantsByLocation={plantsByLocation}
+                        isCardExpanded={isCardExpanded} />
+
+                </View>
+
+            )
+            }
+        />
+
     )
 }
 
 export default RoomListScreen
 
 const styles = StyleSheet.create({
-    roomCard: {
-        borderColor: colors.FadedWhite,
-        borderWidth: 1,
-        borderRadius: 16,
-        marginBottom: 16,
-        flexDirection: "row",
-    },
+
     LinearGradientStyle: {
         flex: 1,
         flexDirection: "row",
@@ -128,6 +169,9 @@ const styles = StyleSheet.create({
         opacity: 0.9,
     },
     name: {
+        position: 'absolute',
+        left: '20%',
+        top: 24,
         textAlignVertical: 'center',
         fontSize: 24,
         fontWeight: "400",
@@ -165,4 +209,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    visibleconatiner: {
+        borderColor: 'red',
+        borderWidth: 2,
+        marginTop: 80,
+        margin: 8,
+        flex: 1,
+        padding: 8,
+
+    }
 })

@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../config/colors"
 
-const PlantCardPreview = (item) => {
+const PlantCardPreview = (flatlistItems) => {
 
     const {
         thumbnail,
@@ -16,6 +16,13 @@ const PlantCardPreview = (item) => {
         wateringFrequency,
         healthRating,
     } = flatlistItems;
+    const RateColor = [
+        colors.Red,
+        colors.Orange,
+        colors.Yellow,
+        colors.LightGreen,
+        colors.Full,
+    ];
 
 
     const healthColor = RateColor[healthRating - 1];
