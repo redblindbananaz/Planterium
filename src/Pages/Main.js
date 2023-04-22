@@ -46,12 +46,10 @@ const Main = ({ navigation }) => {
     };
     return (
         <View style={styles.container}>
-
-
             <BackgroundImage />
-            {RenderContent()}
-            <TabBar activeTab={activeTab} onTabChange={handleTabChange} />
 
+            <TabBar activeTab={activeTab} onTabChange={handleTabChange} />
+            {RenderContent()}
             <LinearGradient
                 colors={[
                     "rgba(43, 46, 46, 0)",
@@ -62,7 +60,6 @@ const Main = ({ navigation }) => {
                 style={styles.stickybottom}
             >
                 <AddButton style={styles.stickybottom} onPress={() => navigation.navigate('Register')} />
-
                 <View style={styles.fakeFooter} />
             </LinearGradient>
         </View>
@@ -77,17 +74,17 @@ const styles = StyleSheet.create({
     },
     stickybottom: {
         position: "absolute",
-        backgroundColor: "black",
         bottom: 0,
         left: 0,
         right: 0,
-        height: 80,
+        height: 100,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "transparent",
     },
     fakeFooter: {
-        height: 80,
+
+        height: 100,
         // Same height as sticky footer
     },
 })

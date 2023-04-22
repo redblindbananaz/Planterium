@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         marginTop: "40%",
+        marginBottom: '10%'
 
     },
     // scroll: {

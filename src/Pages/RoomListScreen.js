@@ -4,6 +4,7 @@ import { DatabaseConnection } from '../DataBase/Database';
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from '../config/colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 
 import WelcomeMessage from '../components/WelcomeMessage'
@@ -12,6 +13,8 @@ import WelcomeMessage from '../components/WelcomeMessage'
 const db = DatabaseConnection.getConnection();
 
 const RoomCard = ({ room, plantCount }) => {
+
+
 
     const roomNameToId = {
         1: 'Bedroom',
@@ -25,6 +28,17 @@ const RoomCard = ({ room, plantCount }) => {
     const roomId = parseInt(room, 10);
     const roomName = roomNameToId[roomId];
 
+    const photosToId = {
+        1: require('../Assets/bedroom.png'),
+        2: require('../Assets/lounge.png'),
+        3: require('../Assets/bathroom.png'),
+        4: require('../Assets/kitchen.png'),
+        5: require('../Assets/office.png'),
+        6: require('../Assets/cabinet.png'),
+        7: require('../Assets/hallway.png'),
+    };
+    const photo = photosToId[roomId]
+
     return (
         <View>
             <TouchableOpacity>
@@ -35,7 +49,7 @@ const RoomCard = ({ room, plantCount }) => {
                         end={[0, 1]}
                         style={styles.LinearGradientStyle}
                     >
-                        <Image style={styles.thumbnailRoom} />
+                        <Image source={photo} style={styles.thumbnailRoom} />
                         <Text style={styles.name}>{roomName}</Text>
                         <View style={styles.numberPlants}>
                             <Text style={styles.number}>{plantCount}</Text>
@@ -51,6 +65,8 @@ const RoomCard = ({ room, plantCount }) => {
 const RoomListScreen = () => {
 
     const [roomList, setRoomList] = useState([]);
+    // Use useIsFocused hook to determine if the screen is focused, to update DATA
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         // Retrieve the list of rooms with the number of plants in each room
@@ -66,7 +82,7 @@ const RoomListScreen = () => {
                 }
             );
         });
-    }, []);
+    }, [isFocused]);
     return (
         <View style={styles.containerRoom}>
             <FlatList

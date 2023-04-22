@@ -38,6 +38,8 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - Counter
 - Dynamic colors for Health rates
 - Splash Screen
+- SQl Grouping and Counting
+- Transparancy and gradient design.
 
 ## BugFix:
 
@@ -59,18 +61,19 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - **Dynamic dates** range of dates tested during Bugfix for the 3 features (last watered, next watering, time owned since purchased)
 - **Dynamic colors** tested and shows accordingly on icon and text of Health.
 - **Details** when changes, details represented correctly according to card view and when changes, all applies.
-- **Bufix** have been tested and passed.
+- **Bugfix** have been tested and passed( Unless marked as NOT RESOLVED)
+- **Rooms** showing dynamically.Disappear when no plants in the room and update number of plants if plant added to the room.
 
 ## To do List:
 
 - Finish View plant layout: **Done**
-- Room => show accurate number of plants
+- Room => show accurate number of plants: **Done**
 - long press select for cards=> watering
 - watering rooms?
 - overdue watering=> red border of cards or red tint=> custom attributes
 - Camera issues promises
 - Sort cards by next watered
 - On press cancel, water, etc... colors.accent
-- Fix days 8.0 to 8
+- Fix days 8.0 to 8 **Done** Data base updated to Integer for Days
 - Create ascreen recording to demo the application.
 - README file for GitHub
