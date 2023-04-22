@@ -44,6 +44,9 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - **Plant Card Home**: Calculation of Date formatting issues, all dates are now at the right format, calculation of **last time watered** ( time difference between last watering date=> represent in days with current day), calculation of **Next watering** date (time difference last watering date, current date => represent in days=> (n)days || Overdue || Now || tomorrow),calculation of **Time owned** (time difference between purchase date and current date=> representation per: days||months||Years accordingly).
   **All calculation are now working and tested**
 - **Counter water schedule**: Limit sets to 1 minimum and 31 for max: Bug appear when pressing plus: goes from default value 4 to 41. also when default 4=> record 3. Limit issues
+- **Camera**:
+  Info: 'In JavaScript, a **promise** represents an operation that may complete either successfully or with an error. When working with promises, it's important to handle both successful and failed results. An unhandled promise rejection occurs when a promise is rejected (i.e., an error occurs), but there is no error handler to handle the error. This means that the error is not being caught and the code is not handling it properly, which can lead to unexpected behavior or crashes.
+  For example, if you are making an API call using a promise and the call fails, but there is no error handling in place, the promise will be rejected and you may see an "unhandled promise rejection" error in your console.'
 
 ## Testing:
 
@@ -55,6 +58,7 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - **Dynamic dates** range of dates tested during Bugfix for the 3 features (last watered, next watering, time owned since purchased)
 - **Dynamic colors** tested and shows accordingly on icon and text of Health.
 - **Details** when changes, details represented correctly according to card view and when changes, all applies.
+- **Bufix** have been tested and passed.
 
 ## To do List:
 
@@ -67,3 +71,5 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - Sort cards by next watered
 - On press cancel, water, etc... colors.accent
 - Fix days 8.0 to 8
+- Create ascreen recording to demo the application.
+- README file for GitHub
