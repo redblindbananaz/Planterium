@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../config/colors"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 
 import Registercards from '../components/Registercards';
 import ActionConfirmPopup from '../components/ActionConfirmPopup';
@@ -139,10 +140,10 @@ const ViewPlant = ({ navigation, route }) => {
         'Dead', 'Poor', 'Fair', 'Good', 'Great'
     ]
 
+    const Locations = [
+        'Bedroom', 'Lounge', 'Bathroom', 'Kitchen', 'Office', 'Cabinet', 'Other'
 
-
-
-
+    ]
 
     return (
 
@@ -180,40 +181,52 @@ const ViewPlant = ({ navigation, route }) => {
                             <Text style={styles.botanical}>{plantInfo.plant_botanical}</Text>
                             <View style={styles.contentsub}>
                                 <Text style={styles.sub}>Owned Since: </Text>
-                                <Text>{plantInfo.plant_purchase}</Text>
-
+                                <View style={styles.subcontainer}>
+                                    <FontAwesome name="calendar" size={24} color={colors.FadedWhite} style={styles.icon} />
+                                    <Text style={styles.content}>{plantInfo.plant_purchase}</Text>
+                                </View>
                             </View>
                             <View style={styles.contentsub}>
                                 <Text style={styles.sub}>Health: </Text>
-                                <MaterialCommunityIcons
-                                    name="leaf-circle-outline"
-                                    size={30}
-                                    color={RateColor[plantInfo.plant_health - 1]}
-                                    style={styles.healthIcon}
-                                />
-                                <Text
-                                    style={{
-                                        color: RateColor[plantInfo.plant_health - 1], fontSize: 18, letterSpacing: 4,
-                                        fontWeight: '500',
-                                        textAlign: 'center',
-                                    }}
-                                >{RateNames[plantInfo.plant_health - 1]}</Text>
-
-
+                                <View style={styles.subcontainer}>
+                                    <MaterialCommunityIcons
+                                        name="leaf-circle-outline"
+                                        size={24}
+                                        color={RateColor[plantInfo.plant_health - 1]}
+                                        style={styles.icon}
+                                    />
+                                    <Text
+                                        style={{
+                                            color: RateColor[plantInfo.plant_health - 1], fontSize: 14, letterSpacing: 4,
+                                            fontWeight: '500',
+                                            textAlign: 'center',
+                                            paddingHorizontal: 4,
+                                            textAlignVertical: 'center'
+                                        }}
+                                    >{RateNames[plantInfo.plant_health - 1]}</Text>
+                                </View>
 
                             </View>
                             <View style={styles.contentsub}>
                                 <Text style={styles.sub}>Location: </Text>
-                                <Text style={styles.sub2}> {plantInfo.plant_location}</Text>
+                                <View style={styles.subcontainer}><Text style={styles.content}> {Locations[plantInfo.plant_location - 1]}</Text></View>
+
                             </View>
                             <View style={styles.contentsub}>
                                 <Text style={styles.sub}>Water every: </Text>
-                                <Text style={styles.sub2}>{plantInfo.plant_schedule}</Text>
-                                <Text style={styles.sub3}>Days</Text>
+                                <View style={styles.subcontainer}>
+                                    <Text style={styles.content}>{plantInfo.plant_schedule}</Text>
+                                    <Text style={styles.content}> Days</Text>
+                                </View>
+
                             </View>
                             <View style={styles.contentsub}>
                                 <Text style={styles.sub}>Last Watered: </Text>
-                                <Text style={styles.sub2}>{plantInfo.plant_waterDate} Days</Text>
+                                <View style={styles.subcontainer}>
+                                    <FontAwesome name="calendar" size={24} color={colors.FadedWhite} style={styles.icon} />
+                                    <Text style={styles.content}>{plantInfo.plant_waterDate}</Text>
+                                </View>
+
                             </View>
 
 
@@ -326,29 +339,49 @@ const styles = StyleSheet.create({
     },
     contentsub: {
         flexDirection: 'row',
-        borderColor: 'red',
-        borderWidth: 2,
+        borderColor: colors.Glass,
+        borderWidth: 1,
         borderRadius: 16,
-        padding: 16,
+        padding: 8,
         marginBottom: 16,
+        justifyContent: 'space-between',
     },
-
     sub: {
         fontSize: 16,
         letterSpacing: 4,
         fontWeight: '300',
         textAlign: 'center',
         color: colors.White,
+        textAlignVertical: 'center',
     },
-
-    health: {
-        fontSize: 18,
+    sub2: {
+        fontSize: 16,
         letterSpacing: 4,
+        fontWeight: '600',
+        textAlign: 'center',
+        color: colors.White,
 
     },
-
-
-
+    subcontainer: {
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        paddingVertical: 4,
+        borderRadius: 16,
+        borderColor: colors.Glass,
+        borderWidth: 1,
+        backgroundColor: colors.FadedGreen,
+    },
+    icon: {
+        marginRight: 16,
+    },
+    content: {
+        fontSize: 14,
+        letterSpacing: 4,
+        fontWeight: '400',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        color: colors.White,
+    },
 
     //Bottom part:
     pad: {
