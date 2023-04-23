@@ -74,9 +74,8 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - watering rooms **Done**
 - overdue watering=> red border of cards or red tint=> custom attributes
 - Camera issues promises
-- Sort cards by next watered
 - On press cancel, water, etc... colors.accent
 - Fix days 8.0 to 8 **Done** Data base updated to Integer for Days
 - Create ascreen recording to demo the application.
-- README file for GitHub
+- README file for GitHub **Done**
 - Code Clean up
