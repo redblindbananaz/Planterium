@@ -73,9 +73,9 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - empty entries enable **Done**
 - watering rooms **Done**
 - overdue watering=> red border of cards or red tint=> custom attributes
-- Camera issues promises
+- Camera issues promises **Not Solved, talked to PInal regarding a solution.**
 - On press cancel, water, etc... colors.accent
 - Fix days 8.0 to 8 **Done** Data base updated to Integer for Days
-- Create ascreen recording to demo the application.
+- Create ascreen recording to demo the application **Done**
 - README file for GitHub **Done**
-- Code Clean up
+- Code Clean up - never ending...

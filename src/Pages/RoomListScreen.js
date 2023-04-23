@@ -8,12 +8,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
 
-
 import WelcomeMessage from '../components/WelcomeMessage'
-import PlantCardPreview from '../components/PlantCardPreview';
 import Buttons from '../components/Buttons';
 import ActionConfirmPopup from '../components/ActionConfirmPopup';
-
 
 
 const db = DatabaseConnection.getConnection();
@@ -26,6 +23,7 @@ const PlantList = ({ plant }) => {
         colors.LightGreen,
         colors.Full,
     ];
+
     return (
         <View style={styles.visibleconatiner}>
             <MaterialCommunityIcons
@@ -90,10 +88,7 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
                 'UPDATE table_plantData SET plant_waterDate = ? WHERE plant_location = ?',
                 [formattedDate2, selectedRoomId],
                 (tx, results) => {
-
                     console.log('All Plant watering successfully');
-
-                    // You can trigger a refresh of the data here, if needed
                 },
                 (tx, error) => {
                     console.log('Error watering all plants', error);
@@ -155,7 +150,6 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
                                     cancelPress={() => toggleExpand()}
                                     actionName={'Water All'}
                                     actionPress={() => handleActionPress()}
-
                                 />
                             </View>
                         )}
@@ -169,8 +163,8 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
 }
 
 const RoomListScreen = () => {
-    const [plantsByLocation, setPlantsByLocation] = useState({});
 
+    const [plantsByLocation, setPlantsByLocation] = useState({});
     const isFocused = useIsFocused();
     const [isCardExpanded, setIsCardExpanded] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
@@ -187,7 +181,6 @@ const RoomListScreen = () => {
             setExpandedIndex(index);
         }
     }
-
 
     useEffect(() => {
         db.transaction((tx) => {
@@ -211,7 +204,6 @@ const RoomListScreen = () => {
                         }
                         plantsByLocation[plant_location].push(plant);
                     });
-
                     // Set the state with the plants grouped by location
                     setPlantsByLocation(plantsByLocation);
                 }
@@ -234,9 +226,7 @@ const RoomListScreen = () => {
                         toggleExpand={() => toggleExpand(index)}
                         plantsByLocation={plantsByLocation}
                         isCardExpanded={isCardExpanded} />
-
                 </View>
-
             )
             }
             ListEmptyComponent={

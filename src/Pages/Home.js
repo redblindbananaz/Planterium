@@ -1,16 +1,15 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Screen from '../components/Screen'
 import { DatabaseConnection } from '../DataBase/Database'
-import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../config/colors"
+
+
 import WelcomeMessage from "../components/WelcomeMessage"
 import defaultImage from "../Assets/defaultThumbmail.jpg"
-
 
 
 const db = DatabaseConnection.getConnection();
@@ -20,7 +19,6 @@ const Home = ({ navigation }) => {
 
     // Use useIsFocused hook to determine if the screen is focused, to update DATA
     const isFocused = useIsFocused();
-
 
     const handleNAv = () => {
         navigation.navigate('Register')
@@ -61,6 +59,8 @@ const Home = ({ navigation }) => {
         ];
         const healthColor = RateColor[item.plant_health - 1];
 
+        //SORTING ALL DATES FOR ALL DATE RELATED FEATURES:
+
         const currentDate = new Date(); // creates a new Date object with the current date and time
         currentDate.setHours(0, 0, 0, 0); // set time components to zero
         const day = currentDate.getDate().toString().padStart(2, '0');
@@ -96,12 +96,8 @@ const Home = ({ navigation }) => {
 
             const timestamp1 = new Date(formattedDate).getTime();
             const timestamp2 = new Date(item.plant_waterDate).getTime();
-
-
             const datediff = timestamp1 - timestamp2
-
             const differenceInMilliseconds = timestamp1 - timestamp2;
-
             const diffwater = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24))
 
             if (diffwater === 0) {
@@ -119,9 +115,7 @@ const Home = ({ navigation }) => {
             const timestamp1 = new Date(formattedDate).getTime();
             const timestamp2 = new Date(item.plant_waterDate).getTime();
             const timestamp3 = item.plant_schedule * 86400000
-
             const differenceInMilliseconds = timestamp2 - timestamp1 + timestamp3;
-
             const diffwater = differenceInMilliseconds / (24 * 60 * 60 * 1000);
 
             if (diffwater === 0) {
@@ -185,9 +179,7 @@ const Home = ({ navigation }) => {
                     </LinearGradient>
                 </View>
             </TouchableOpacity>
-
         )
-
     }
 
     return (
@@ -218,12 +210,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: "40%",
         marginBottom: '10%'
-
     },
-    // scroll: {
-    //     flex: 1,
-    // },
-
     bottom: {
         position: 'absolute',
         bottom: 0,
@@ -311,7 +298,6 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         textAlignVertical: "center",
     },
-
     rightContent: {
         flex: 1,
     },

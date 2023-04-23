@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View, Image, Button, ScrollView, Modal, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Modal, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Screen from '../components/Screen'
 import { DatabaseConnection } from '../DataBase/Database';
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../config/colors"
@@ -25,7 +24,6 @@ const ViewPlant = ({ navigation, route }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [title, setTitle] = useState('')
     const [message, setMessage] = useState('')
-
 
     const handleCancel = () => {
         navigation.navigate('Main')
@@ -60,11 +58,7 @@ const ViewPlant = ({ navigation, route }) => {
     const day = currentDate.getDate().toString().padStart(2, '0');
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const year = currentDate.getFullYear().toString();
-
     const formattedDate = `${year}-${month}-${day}`;
-
-
-
 
 
     const handleWaterconfirmation = () => {
@@ -97,14 +91,12 @@ const ViewPlant = ({ navigation, route }) => {
         setModalVisible(true)
         setTitle('Watering Now?')
         setMessage('Watering schedule will be update automaticaly if necessary')
-
     };
 
     const handleDeleting = () => {
         setModalVisible(true)
         setTitle('Deleting Plant?')
         setMessage('This action will Delete this plant form the database.')
-
     }
 
     useEffect(() => {
@@ -220,8 +212,6 @@ const ViewPlant = ({ navigation, route }) => {
                                 </View>
 
                             </View>
-
-
 
                         </Registercards>
                         <View style={{

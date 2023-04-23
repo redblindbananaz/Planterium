@@ -6,7 +6,6 @@ import { useIsFocused } from '@react-navigation/native';
 
 import TabBar from '../components/TabBar';
 import Home from './Home';
-import Rooms from './Rooms'
 import BackgroundImage from '../components/BackgroundImage';
 import AddButton from '../components/AddButton';
 import RoomListScreen from './RoomListScreen';
@@ -83,7 +82,6 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent",
     },
     fakeFooter: {
-
         height: 100,
         // Same height as sticky footer
     },

@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
-import Screen from '../components/Screen'
 import { DatabaseConnection } from '../DataBase/Database'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -29,14 +28,7 @@ const log = console.log;
 
 const RegisterPlant = ({ navigation, route }) => {
 
-    // START
-    const startTime = performance.now();
-
-    log('\n############ Entering the REGISTER PLANT PAGE ##########')
-    // const navigation = useNavigation()
     const passedID = route.params?.plant_id || null;
-    console.log('----ID NUMBER: ' + passedID + ' passed from previous Page----')
-
     // When passedID are found from navigation, SET NEW DATA for display:
     useEffect(() => {
         log('useEffect is triggered')
@@ -49,7 +41,6 @@ const RegisterPlant = ({ navigation, route }) => {
                         if (results.rows.length > 0) {
                             const retrieved = results.rows.item(0);
                             log(retrieved)
-                            // setUpdatedPlant(retrieved);
                             setPickedImage(retrieved.plant_thumbnail);
                             setPlantName(retrieved.plant_name);
                             setBotName(retrieved.plant_botanical);
@@ -86,7 +77,6 @@ const RegisterPlant = ({ navigation, route }) => {
     const [selectedLocation, setSelectedLocation] = useState(parseInt('1'));
     const [wateringDuration, setWateringDuration] = useState(parseInt('4'));
     const [waterDate, setWaterDate] = useState(formattedDate2)
-
 
 
     const takeImageHandler = async () => {
@@ -128,7 +118,6 @@ const RegisterPlant = ({ navigation, route }) => {
 
     const register_plant = () => {
         db.transaction(function (tx) {
-
             // ELSE perform an INSERT Operation
             console.log('Register function called and no plant yet: INSERT call')
             tx.executeSql(
@@ -147,8 +136,6 @@ const RegisterPlant = ({ navigation, route }) => {
 
     const handleUpdate = () => {
         // If plant Exist then UPDATE the Operation
-        console.log('CALL for UPDATE function')
-
         db.transaction(function (tx) {
             tx.executeSql(
                 'UPDATE table_plantData SET plant_thumbnail = ?,plant_name = ?, plant_botanical = ?, plant_purchase = ?, plant_health = ?, plant_location = ?, plant_schedule = ?,plant_waterDate = ?  WHERE plant_id = ?',
@@ -159,15 +146,9 @@ const RegisterPlant = ({ navigation, route }) => {
                     navigation.navigate('Main')
                 },
             )
-
         })
-
     }
 
-
-    const endTime = performance.now(); // End the timer
-    const elapsedTime = endTime - startTime; // Calculate elapsed time in milliseconds
-    console.log(`Elapsed time: ${elapsedTime} ms`); // Log the elapsed time
     return (
         <View style={styles.formContainer}>
 

@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import WelcomeMessage from '../components/WelcomeMessage'
 
 const Rooms = () => {
+
     const locations = [
         { id: 1, name: 'Bedroom', image: require('../Assets/bedroom.png') },
         { id: 2, name: 'Lounge', image: require('../Assets/lounge.png') },
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         marginTop: "40%",
-
     },
     content: {},
     listContainer: {
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         marginBottom: 16,
         flexDirection: "row",
-
     },
     name: {
         textAlignVertical: 'center',
@@ -95,7 +94,6 @@ const styles = StyleSheet.create({
         letterSpacing: 5,
         color: colors.FadedWhite,
         marginLeft: 20,
-
     },
     LinearGradientStyle: {
         flex: 1,
