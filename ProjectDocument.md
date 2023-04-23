@@ -49,7 +49,7 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - **Camera**:
   Info: 'In JavaScript, a **promise** represents an operation that may complete either successfully or with an error. When working with promises, it's important to handle both successful and failed results. An unhandled promise rejection occurs when a promise is rejected (i.e., an error occurs), but there is no error handler to handle the error. This means that the error is not being caught and the code is not handling it properly, which can lead to unexpected behavior or crashes.
   For example, if you are making an API call using a promise and the call fails, but there is no error handling in place, the promise will be rejected and you may see an "unhandled promise rejection" error in your console.**NOT RESOLVED**.
-- **Edit** not retrieving information
+- **Edit** not retrieving information- solved (still need to work on updating some child components)
 
 ## Testing:
 

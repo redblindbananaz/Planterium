@@ -11,17 +11,17 @@ const HealthItems = [
     { id: 5, name: 'Great', color: colors.Full },
 ];
 
-const HealthRate = ({ onHealthSelect }) => {
-    const [selectedHealth, setSelectedHealth] = useState(null);
+const HealthRate = ({ onHealthSelect, selectedHealth }) => {
+    // const [selectedHealth, setSelectedHealth] = useState('5');
 
     const handleHealthPress = (id) => {
         if (selectedHealth === id) {
             // deselect if already selected
-            setSelectedHealth(null);
+            onHealthSelect('5');
         }
         else {
-            setSelectedHealth(id);
-            onHealthSelect(id)
+            onHealthSelect(id);
+
         }
     };
     const renderHealthItems = () =>

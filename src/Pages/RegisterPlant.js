@@ -34,19 +34,21 @@ const RegisterPlant = ({ navigation, route }) => {
 
     log('\n############ Entering the REGISTER PLANT PAGE ##########')
     // const navigation = useNavigation()
-    const details = route.params?.plant_id || null;
-    console.log('----ID NUMBER: ' + details + ' passed from previous Page----')
+    const passedID = route.params?.plant_id || null;
+    console.log('----ID NUMBER: ' + passedID + ' passed from previous Page----')
 
-    // When details are found from navigation, SET NEW DATA for display:
+    // When passedID are found from navigation, SET NEW DATA for display:
     useEffect(() => {
-        if (details !== null) {
+        log('useEffect is triggered')
+        if (passedID !== null) {
             db.transaction((tx) => {
                 tx.executeSql(
-                    'SELECT * FROM table_plantest1 WHERE plant_id = ?',
-                    [details],
+                    'SELECT * FROM table_plantData WHERE plant_id = ?',
+                    [passedID],
                     (tx, results) => {
                         if (results.rows.length > 0) {
                             const retrieved = results.rows.item(0);
+                            log(retrieved)
                             // setUpdatedPlant(retrieved);
                             setPickedImage(retrieved.plant_thumbnail);
                             setPlantName(retrieved.plant_name);
@@ -64,7 +66,8 @@ const RegisterPlant = ({ navigation, route }) => {
         } else {
             log('Details are null, so data is not retrieved from previous screen');
         }
-    }, [details]);
+    }, [passedID]);
+
 
     const currentDate2 = new Date();
     const day = currentDate2.getDate().toString().padStart(2, '0');
@@ -114,7 +117,7 @@ const RegisterPlant = ({ navigation, route }) => {
     // Handling DIfferent Press:
 
     const handlePress = () => {
-        if (details) {
+        if (passedID) {
             handleUpdate()
         } else {
             register_plant()
@@ -149,7 +152,7 @@ const RegisterPlant = ({ navigation, route }) => {
         db.transaction(function (tx) {
             tx.executeSql(
                 'UPDATE table_plantData SET plant_thumbnail = ?,plant_name = ?, plant_botanical = ?, plant_purchase = ?, plant_health = ?, plant_location = ?, plant_schedule = ?,plant_waterDate = ?  WHERE plant_id = ?',
-                [imagepicked, plantName, BotName, selectedDate, selectedHealth, selectedLocation, wateringDuration, waterDate, details],
+                [imagepicked, plantName, BotName, selectedDate, selectedHealth, selectedLocation, wateringDuration, waterDate, passedID],
 
                 (tx, results) => {
                     console.log('Plant UPDATED successfully')
@@ -246,7 +249,8 @@ const RegisterPlant = ({ navigation, route }) => {
 
                 <Registercards caterory="Health:" underlineSize={92} >
                     <HealthRate onHealthSelect={setSelectedHealth}
-                        selectedHealth={selectedHealth} />
+                        selectedHealth={selectedHealth}
+                    />
                 </Registercards>
 
                 <Registercards caterory="Location:" underlineSize={120}>
@@ -264,7 +268,7 @@ const RegisterPlant = ({ navigation, route }) => {
                 </Registercards>
                 <View style={styles.bottomContainer}>
                     <Buttons
-                        actionName={details ? 'Update' : 'Register'}
+                        actionName={passedID ? 'Update' : 'Register'}
                         cancelPress={() => navigation.navigate('Main'
                         )}
                         actionPress={handlePress}

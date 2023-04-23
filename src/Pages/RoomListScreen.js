@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DatabaseConnection } from '../DataBase/Database';
 import { LinearGradient } from "expo-linear-gradient";
@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import WelcomeMessage from '../components/WelcomeMessage'
 import PlantCardPreview from '../components/PlantCardPreview';
 import Buttons from '../components/Buttons';
+import ActionConfirmPopup from '../components/ActionConfirmPopup';
 
 
 
@@ -40,7 +41,11 @@ const PlantList = ({ plant }) => {
 }
 
 const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExpand }) => {
+
     const navigation = useNavigation();
+    const [modalVisible, setModalVisible] = useState(false)
+    const [title, setTitle] = useState('')
+    const [message, setMessage] = useState('')
 
     const locations = {
         1: 'Bedroom',
@@ -66,6 +71,7 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
     const thumbs = thumbnails.hasOwnProperty(parseInt(location)) ? thumbnails[parseInt(location)] : 'Unknown';
 
     const currentDate2 = new Date();
+    currentDate2.setHours(0, 0, 0, 0); // set time components to zero
     const day = currentDate2.getDate().toString().padStart(2, '0');
     const month = (currentDate2.getMonth() + 1).toString().padStart(2, '0');
     const year = currentDate2.getFullYear().toString();
@@ -76,15 +82,17 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
     const handleWaterDateUpdate = () => {
         // Get the room id of the selected room
         const selectedRoomId = parseInt(location);
-
+        setModalVisible(false)
+        toggleExpand()
         // Update the water date of each plant
         db.transaction(function (tx) {
             tx.executeSql(
                 'UPDATE table_plantData SET plant_waterDate = ? WHERE plant_location = ?',
                 [formattedDate2, selectedRoomId],
                 (tx, results) => {
+
                     console.log('All Plant watering successfully');
-                    navigation.navigate('Main')
+
                     // You can trigger a refresh of the data here, if needed
                 },
                 (tx, error) => {
@@ -95,8 +103,28 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
 
     };
 
+    const handleActionPress = () => {
+        setModalVisible(true)
+        setTitle('Watering All?')
+        setMessage('Watering schedule will be update automaticaly if necessary for all plants in this Location')
+
+    }
+    const handleCancel = () => {
+        navigation.navigate('Main')
+    }
+
     return (
         <ScrollView >
+            <Modal visible={modalVisible} transparent >
+                <ActionConfirmPopup
+                    title={title}
+                    message={message}
+                    message2='Would you like to Continue?'
+                    cancelPress={handleCancel}
+                    actionPress={handleWaterDateUpdate}
+                    actionName='CONFIRM' />
+
+            </Modal>
             <TouchableOpacity onPress={toggleExpand}>
                 <View style={{
                     borderColor: colors.FadedWhite,
@@ -126,7 +154,7 @@ const RoomCard = ({ location, plantCount, plantsByLocation, isVisible, toggleExp
                                 <Buttons
                                     cancelPress={() => toggleExpand()}
                                     actionName={'Water All'}
-                                    actionPress={handleWaterDateUpdate}
+                                    actionPress={() => handleActionPress()}
 
                                 />
                             </View>
@@ -294,8 +322,6 @@ const styles = StyleSheet.create({
     PlantInLocationContainer: {
         justifyContent: 'center',
         width: '100%',
-        borderColor: 'red',
-        borderWidth: 2,
         padding: 8,
 
     },

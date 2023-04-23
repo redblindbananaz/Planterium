@@ -96,15 +96,14 @@ const Home = ({ navigation }) => {
 
             const timestamp1 = new Date(formattedDate).getTime();
             const timestamp2 = new Date(item.plant_waterDate).getTime();
-            console.log(item.plant_waterDate)
-            console.log(formattedDate)
+
 
             const datediff = timestamp1 - timestamp2
 
             const differenceInMilliseconds = timestamp1 - timestamp2;
 
             const diffwater = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24))
-            console.log(diffwater)
+
             if (diffwater === 0) {
                 return "Today";
             } else if (diffwater === 1) {
