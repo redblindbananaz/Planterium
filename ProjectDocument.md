@@ -63,13 +63,15 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - **Details** when changes, details represented correctly according to card view and when changes, all applies.
 - **Bugfix** have been tested and passed( Unless marked as NOT RESOLVED)
 - **Rooms** showing dynamically.Disappear when no plants in the room and update number of plants if plant added to the room.
+- **WateringRoom** updates all waterdate back to today and reset next watering days according to waterscheddule for all plants in the selected room.
+- **DefaultThumbnail** if no image picked by camera or gallery.
 
 ## To do List:
 
 - Finish View plant layout: **Done**
 - Room => show accurate number of plants: **Done**
-- empty entries enable
-- watering rooms?
+- empty entries enable **Done**
+- watering rooms **Done**
 - overdue watering=> red border of cards or red tint=> custom attributes
 - Camera issues promises
 - Sort cards by next watered
