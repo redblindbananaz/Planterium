@@ -9,7 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from "../config/colors"
 import { Camera } from 'expo-camera';
 
-
+import defaultImage from "../Assets/defaultThumbmail.jpg"
 import * as ImagePicker from 'expo-image-picker';
 
 
@@ -66,16 +66,23 @@ const RegisterPlant = ({ navigation, route }) => {
         }
     }, [details]);
 
+    const currentDate2 = new Date();
+    const day = currentDate2.getDate().toString().padStart(2, '0');
+    const month = (currentDate2.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate2.getFullYear().toString();
+
+    const formattedDate2 = `${year}-${month}-${day}`;
+
     //USESTATE DATA AND CAMERA STUFF:
 
-    const [imagepicked, setPickedImage] = useState()
-    const [plantName, setPlantName] = useState("");
-    const [BotName, setBotName] = useState("");
-    const [selectedDate, setSelectedDate] = useState("");
+    const [imagepicked, setPickedImage] = useState(defaultImage.uri)
+    const [plantName, setPlantName] = useState("My New Plant");
+    const [BotName, setBotName] = useState("Scientific Name Unknown");
+    const [selectedDate, setSelectedDate] = useState(formattedDate2);
     const [selectedHealth, setSelectedHealth] = useState('5');
     const [selectedLocation, setSelectedLocation] = useState(parseInt('1'));
     const [wateringDuration, setWateringDuration] = useState(parseInt('4'));
-    const [waterDate, setWaterDate] = useState("")
+    const [waterDate, setWaterDate] = useState(formattedDate2)
 
 
 
@@ -176,7 +183,7 @@ const RegisterPlant = ({ navigation, route }) => {
             >
                 <View style={styles.rightCorner}>
                     <View style={styles.image}>
-                        <Image source={{ uri: imagepicked }}
+                        <Image source={imagepicked ? { uri: imagepicked } : defaultImage}
                             style={{
                                 width: 150,
                                 height: 150,

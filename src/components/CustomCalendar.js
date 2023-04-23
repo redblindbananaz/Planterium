@@ -7,7 +7,7 @@ import { colors } from "../config/colors";
 const CustomCalendar = ({ onDateSelect, onSelect, onCancel }) => {
 
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
-    // console.log(selectedDate)
+    console.log(selectedDate)
 
     const daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     // const daysInMonth = moment(selectedDate).daysInMonth();

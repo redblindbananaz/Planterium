@@ -11,6 +11,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import Registercards from '../components/Registercards';
 import ActionConfirmPopup from '../components/ActionConfirmPopup';
 import UnderlineCategory from '../components/UnderlineCategory'
+import defaultImage from "../Assets/defaultThumbmail.jpg"
 
 const db = DatabaseConnection.getConnection();
 
@@ -55,12 +56,13 @@ const ViewPlant = ({ navigation, route }) => {
 
 
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // set time components to zero
     const day = currentDate.getDate().toString().padStart(2, '0');
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const year = currentDate.getFullYear().toString();
 
-    const formattedDate = `${day}-${month}-${year}`;
-    console.log('Today\'s date is ' + formattedDate);
+    const formattedDate = `${year}-${month}-${day}`;
+
 
 
 
@@ -119,15 +121,6 @@ const ViewPlant = ({ navigation, route }) => {
         });
     }, [plantId]);
 
-
-    const HealthItems = [
-        { id: 1, name: 'Dead', color: colors.Red },
-        { id: 2, name: 'Poor', color: colors.Orange },
-        { id: 3, name: 'Fair', color: colors.Yellow },
-        { id: 4, name: 'Good', color: colors.LightGreen },
-        { id: 5, name: 'Great', color: colors.Full },
-    ];
-
     const RateColor = [
         colors.Red,
         colors.Orange,
@@ -171,7 +164,7 @@ const ViewPlant = ({ navigation, route }) => {
                         showsVerticalScrollIndicator={true}
                         bounces={false}
                     >
-                        <Image source={{ uri: plantInfo.plant_thumbnail }} style={styles.imagecontainer} />
+                        <Image source={plantInfo.plant_thumbnail ? { uri: plantInfo.plant_thumbnail } : defaultImage} style={styles.imagecontainer} />
 
                         <Registercards underlineSize={0}>
                             {/* <Text>Plant ID: {plantInfo.plant_id}</Text> */}

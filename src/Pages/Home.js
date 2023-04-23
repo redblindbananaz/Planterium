@@ -9,6 +9,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../config/colors"
 import WelcomeMessage from "../components/WelcomeMessage"
+import defaultImage from "../Assets/defaultThumbmail.jpg"
 
 
 
@@ -61,7 +62,7 @@ const Home = ({ navigation }) => {
         const healthColor = RateColor[item.plant_health - 1];
 
         const currentDate = new Date(); // creates a new Date object with the current date and time
-
+        currentDate.setHours(0, 0, 0, 0); // set time components to zero
         const day = currentDate.getDate().toString().padStart(2, '0');
         const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
         const year = currentDate.getFullYear().toString();
@@ -75,6 +76,7 @@ const Home = ({ navigation }) => {
 
             const differenceInMilliseconds = timestamp1 - timestamp2;
             const diff = differenceInMilliseconds / (24 * 60 * 60 * 1000);
+
 
             if (diff >= 365) {
                 return `${Math.floor(diff / 365)} Years `;
@@ -91,12 +93,18 @@ const Home = ({ navigation }) => {
         }
         const getLastWateredTime = (item) => {
 
+
             const timestamp1 = new Date(formattedDate).getTime();
             const timestamp2 = new Date(item.plant_waterDate).getTime();
+            console.log(item.plant_waterDate)
+            console.log(formattedDate)
+
+            const datediff = timestamp1 - timestamp2
 
             const differenceInMilliseconds = timestamp1 - timestamp2;
 
-            const diffwater = differenceInMilliseconds / (24 * 60 * 60 * 1000);
+            const diffwater = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24))
+            console.log(diffwater)
             if (diffwater === 0) {
                 return "Today";
             } else if (diffwater === 1) {
@@ -146,7 +154,7 @@ const Home = ({ navigation }) => {
                         end={[0, 1]}
                         style={styles.LinearGradientStyle}
                     >
-                        <Image source={{ uri: item.plant_thumbnail }} style={styles.thumbnailPlant} />
+                        <Image source={item.plant_thumbnail ? { uri: item.plant_thumbnail } : defaultImage} style={styles.thumbnailPlant} />
                         <View style={styles.midContent}>
                             <Text style={styles.name}>{item.plant_name}</Text>
                             <Text style={styles.botanical}>{item.plant_botanical}</Text>
