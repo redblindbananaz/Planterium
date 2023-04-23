@@ -87,7 +87,7 @@ const RegisterPlant = ({ navigation, route }) => {
 
 
     }
-    // Try this new method with Pinal to solve camera Possible unhandled promise rejection (id:0) -> and also downgrade image picker version.
+    // Try this new method with Pinal to solve camera Possible unhandled promise rejection (id:0) -> and also downgrade image picker version BUT Not solving issue...
     // const openCamera = async () => { // Ask the user for the permission to access the camera
     //     const permissionResult = await ImagePicker.requestCameraPermissionsAsync(); if (permissionResult.granted === false) { alert("You've refused to allow this appp to access your camera!"); return; } const result = await ImagePicker.launchCameraAsync(); // Explore the result
     //     console.log(result); setPickedImage(result.uri); console.log(result.uri);

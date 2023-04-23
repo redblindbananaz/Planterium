@@ -38,7 +38,7 @@ The mobile application, **Planterium**, aims to address the challenges faced by 
 - Counter
 - Dynamic colors for Health rates
 - Splash Screen
-- SQl Grouping and Counting
+- SQl Group, count, join opeartions
 - Transparancy and gradient design.
 
 ## BugFix:
