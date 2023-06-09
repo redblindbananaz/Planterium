@@ -17,6 +17,8 @@ You are an individual App developer looking for a new app idea. You have three a
 
 The mobile application, **Planterium**, aims to address the challenges faced by plant enthusiasts in keeping track of their plant collection and maintaining an effective watering schedule. This application is designed for individuals who have a good knowledge of plants and possess a diverse collection, making it difficult to remember the last time a plant was watered or its age.
 
+![Screenshot](screenshot.png)
+
 #### Documentation:
 
 ProjectDocument is attached to this project to demonstrate the steps that have been taken during the developement of the application, including proof of testing
